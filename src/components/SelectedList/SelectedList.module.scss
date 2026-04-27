@@ -1,0 +1,103 @@
+@use "../../styles/utils/vars" as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+  gap: 16px;
+  background-color: $card-bg;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid $card-border;
+  animation: fade-in 0.5s ease-in-out forwards;
+}
+
+.preview {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 10px;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.author {
+  margin: 0;
+  color: $primary-text;
+}
+
+.mainContent {
+  padding-block: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.link {
+  color: $link-color;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.emptyMessage {
+  text-align: center;
+  color: $empty-message-color;
+}
+
+.unselectBtn {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  align-self: center;
+  margin-right: 16px;
+  cursor: pointer;
+
+  &::after,
+  &::before {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: $icons-color;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  &::before {
+    transform: translate(-50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%) rotate(-45deg);
+  }
+
+  &:hover {
+    &::before,
+    &::after {
+      background-color: #64748b;
+    }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

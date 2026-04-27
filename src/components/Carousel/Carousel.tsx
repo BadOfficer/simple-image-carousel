@@ -4,11 +4,13 @@ import { useCarousel } from "../../hooks/useCarousel";
 
 interface Props {
   images: Image[];
+  onSlideClick: (id: Image["id"]) => void;
+  isSelected: (id: Image["id"]) => boolean;
 }
 
 const SLIDES_GAP = 8;
 
-export function Carousel({ images }: Props) {
+export function Carousel({ images, onSlideClick, isSelected }: Props) {
   const { visibleSlides, handlePrev, handleNext, activeSlide } = useCarousel(
     images.length,
   );
@@ -18,9 +20,10 @@ export function Carousel({ images }: Props) {
 
   return (
     <div className={styles.wrapper}>
-      <button className={styles.arrowBtn} onClick={handlePrev}>
-        prev
-      </button>
+      <button
+        className={`${styles.arrowBtn} ${styles.leftArrow}`}
+        onClick={handlePrev}
+      ></button>
       <div className={styles.carousel}>
         <ul
           className={styles.track}
@@ -32,22 +35,24 @@ export function Carousel({ images }: Props) {
           {images.map((img, index) => (
             <li
               key={img.id}
-              className={styles.slide}
+              className={`${styles.slide} ${isSelected(img.id) ? styles.selected : ""}`}
               style={{
                 flex: `0 0 ${slideWidth}`,
               }}
+              onClick={() => onSlideClick(img.id)}
             >
               <img
-                src={img.download_url}
+                src={img.download_url.replace(/(\/\d+\/\d+)$/, "/400/400")}
                 alt={`Image ${index + 1} by ${img.author}`}
               />
             </li>
           ))}
         </ul>
       </div>
-      <button className={`${styles.arrowBtn}`} onClick={handleNext}>
-        next
-      </button>
+      <button
+        className={`${styles.arrowBtn} ${styles.rightArrow}`}
+        onClick={handleNext}
+      ></button>
     </div>
   );
 }

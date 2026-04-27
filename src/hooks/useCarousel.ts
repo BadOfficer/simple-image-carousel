@@ -9,18 +9,14 @@ export function useCarousel(slidesLength: number) {
       const windowWidth = window.innerWidth;
 
       if (windowWidth >= 1200) {
-        return setVisibleSlides(5);
+        setVisibleSlides(4);
+      } else if (windowWidth >= 1024) {
+        setVisibleSlides(3);
+      } else if (windowWidth >= 768) {
+        setVisibleSlides(2);
+      } else {
+        setVisibleSlides(1);
       }
-
-      if (windowWidth >= 1024) {
-        return setVisibleSlides(4);
-      }
-
-      if (windowWidth >= 768) {
-        return setVisibleSlides(3);
-      }
-
-      setVisibleSlides(1);
     };
 
     onResize();
