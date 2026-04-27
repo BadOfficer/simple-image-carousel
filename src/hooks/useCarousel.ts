@@ -1,0 +1,55 @@
+import { useEffect, useState } from "react";
+
+export function useCarousel(slidesLength: number) {
+  const [visibleSlides, setVisibleSlides] = useState(1);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const onResize = () => {
+      const windowWidth = window.innerWidth;
+
+      if (windowWidth >= 1200) {
+        return setVisibleSlides(5);
+      }
+
+      if (windowWidth >= 1024) {
+        return setVisibleSlides(4);
+      }
+
+      if (windowWidth >= 768) {
+        return setVisibleSlides(3);
+      }
+
+      setVisibleSlides(1);
+    };
+
+    onResize();
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    setActiveSlide((prev) => {
+      const maxIndex = Math.max(0, slidesLength - visibleSlides);
+      return Math.min(prev, maxIndex);
+    });
+  }, [visibleSlides, slidesLength]);
+
+  const handleNext = () => {
+    setActiveSlide((prev) => Math.min(slidesLength - visibleSlides, prev + 1));
+  };
+  const handlePrev = () => {
+    setActiveSlide((prev) => Math.max(0, prev - 1));
+  };
+
+  return {
+    visibleSlides,
+    handleNext,
+    handlePrev,
+    activeSlide,
+  };
+}

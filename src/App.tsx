@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import type { Image } from "./types/Image";
 import { typedFetch } from "./utils/typedFetch";
+import { Carousel } from "./components/Carousel";
 
 function App() {
   const [images, setImages] = useState<Image[]>([]);
 
   useEffect(() => {
-    typedFetch<Image[]>("https://picsum.photos/v2/list")
+    typedFetch<Image[]>("https://picsum.photos/v2/list?limit=20")
       .then((imagesData) => {
         setImages(imagesData);
       })
@@ -14,17 +15,8 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <ul>
-        {images.map((img, index) => (
-          <li key={img.id}>
-            <img
-              src={img.download_url}
-              alt={`Image ${index + 1} by ${img.author}`}
-            />
-          </li>
-        ))}
-      </ul>
+    <div className="container">
+      <Carousel images={images} />
     </div>
   );
 }
