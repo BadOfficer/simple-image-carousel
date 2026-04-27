@@ -1,6 +1,7 @@
 import type { Image } from "../../types/Image";
 import styles from "./Carousel.module.scss";
 import { useCarousel } from "../../hooks/useCarousel";
+import { prepareImageUrl } from "../../helpers/prepareImgUrl";
 
 interface Props {
   images: Image[];
@@ -11,9 +12,15 @@ interface Props {
 const SLIDES_GAP = 8;
 
 export function Carousel({ images, onSlideClick, isSelected }: Props) {
-  const { visibleSlides, handlePrev, handleNext, activeSlide } = useCarousel(
-    images.length,
-  );
+  const {
+    visibleSlides,
+    handlePrev,
+    handleNext,
+    activeSlide,
+    slides,
+    checkIfSlidesEnds,
+    smooth,
+  } = useCarousel(images);
 
   const slideWidth = `calc((100% - ${SLIDES_GAP * (visibleSlides - 1)}px) / ${visibleSlides})`;
   const offset = `calc(-${activeSlide} * (${slideWidth} + ${SLIDES_GAP}px))`;
@@ -26,15 +33,16 @@ export function Carousel({ images, onSlideClick, isSelected }: Props) {
       ></button>
       <div className={styles.carousel}>
         <ul
-          className={styles.track}
+          className={`${styles.track} ${smooth ? styles.smooth : ""}`}
           style={{
             transform: `translateX(${offset})`,
             gap: `${SLIDES_GAP}px`,
           }}
+          onTransitionEnd={checkIfSlidesEnds}
         >
-          {images.map((img, index) => (
+          {slides.map((img, index) => (
             <li
-              key={img.id}
+              key={`${index}_${img.id}`}
               className={`${styles.slide} ${isSelected(img.id) ? styles.selected : ""}`}
               style={{
                 flex: `0 0 ${slideWidth}`,
@@ -42,7 +50,7 @@ export function Carousel({ images, onSlideClick, isSelected }: Props) {
               onClick={() => onSlideClick(img.id)}
             >
               <img
-                src={img.download_url.replace(/(\/\d+\/\d+)$/, "/400/400")}
+                src={prepareImageUrl(img.download_url)}
                 alt={`Image ${index + 1} by ${img.author}`}
               />
             </li>

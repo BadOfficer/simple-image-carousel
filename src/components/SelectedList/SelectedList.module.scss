@@ -1,4 +1,5 @@
 @use "../../styles/utils/vars" as *;
+@use "../../styles/utils/mixins" as *;
 
 .list {
   display: flex;
@@ -15,7 +16,7 @@
   overflow: hidden;
   border-radius: 10px;
   border: 1px solid $card-border;
-  animation: fade-in 0.5s ease-in-out forwards;
+  animation: fade-in 0.5s $main-transition-func forwards;
 }
 
 .preview {
@@ -34,6 +35,13 @@
 .author {
   margin: 0;
   color: $primary-text;
+  font-size: 14px;
+
+  @include is-landscape-mobile {
+    & {
+      font-size: 20px;
+    }
+  }
 }
 
 .mainContent {
@@ -46,9 +54,16 @@
 
 .link {
   color: $link-color;
+  font-size: 14px;
 
   &:hover {
     color: $primary-color;
+  }
+
+  @include is-landscape-mobile {
+    & {
+      font-size: 18px;
+    }
   }
 }
 

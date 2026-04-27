@@ -6,40 +6,22 @@ import { LinksList } from "./components/SelectedList";
 import { Loader } from "./components/Loader";
 
 import "./App.scss";
+import { useSelect } from "./hooks/useSelect";
 
 function App() {
   const [images, setImages] = useState<Image[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedImagesIds, setSelectedImagesIds] = useState<Image["id"][]>([]);
+  const { handleToggleId, isSelected, selectedImages } = useSelect(images);
 
   useEffect(() => {
     setIsLoading(true);
-    typedFetch<Image[]>("https://picsum.photos/v2/list?limit=10")
+    typedFetch<Image[]>("https://picsum.photos/v2/list?limit=20")
       .then((imagesData) => {
         setImages(imagesData);
       })
       .catch((e) => console.error(e))
       .finally(() => setIsLoading(false));
   }, []);
-
-  const handleToggleId = (id: Image["id"]) => {
-    setSelectedImagesIds((prevList) => {
-      if (prevList.includes(id)) {
-        return prevList.filter((itemId) => itemId !== id);
-      }
-
-      return [...prevList, id];
-    });
-  };
-
-  const selectedImages = images.filter((img) =>
-    selectedImagesIds.includes(img.id),
-  );
-
-  const isSelected = (id: Image["id"]) => {
-    return selectedImagesIds.includes(id);
-  };
 
   return (
     <div className="container">

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import type { Image } from "../types/Image";
 
-export function useCarousel(slidesLength: number) {
+export function useCarousel(initialSlides: Image[]) {
   const [visibleSlides, setVisibleSlides] = useState(1);
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(1);
+  const [smooth, setSmooth] = useState(true);
 
   useEffect(() => {
     const onResize = () => {
@@ -29,17 +31,34 @@ export function useCarousel(slidesLength: number) {
   }, []);
 
   useEffect(() => {
-    setActiveSlide((prev) => {
-      const maxIndex = Math.max(0, slidesLength - visibleSlides);
-      return Math.min(prev, maxIndex);
-    });
-  }, [visibleSlides, slidesLength]);
+    setActiveSlide(visibleSlides);
+  }, [visibleSlides]);
+
+  const slidesLength = initialSlides.length;
+
+  const slides = [
+    ...initialSlides.slice(-visibleSlides),
+    ...initialSlides,
+    ...initialSlides.slice(0, visibleSlides),
+  ];
+
+  const checkIfSlidesEnds = () => {
+    if (activeSlide >= slidesLength + visibleSlides) {
+      setActiveSlide(visibleSlides);
+      setSmooth(false);
+    } else if (activeSlide <= 0) {
+      setActiveSlide(slides.length - 2 * visibleSlides);
+      setSmooth(false);
+    }
+  };
 
   const handleNext = () => {
-    setActiveSlide((prev) => Math.min(slidesLength - visibleSlides, prev + 1));
+    setSmooth(true);
+    setActiveSlide((prev) => prev + 1);
   };
   const handlePrev = () => {
-    setActiveSlide((prev) => Math.max(0, prev - 1));
+    setSmooth(true);
+    setActiveSlide((prev) => prev - 1);
   };
 
   return {
@@ -47,5 +66,8 @@ export function useCarousel(slidesLength: number) {
     handleNext,
     handlePrev,
     activeSlide,
+    slides,
+    checkIfSlidesEnds,
+    smooth,
   };
 }

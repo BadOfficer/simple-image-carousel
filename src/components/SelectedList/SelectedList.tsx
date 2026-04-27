@@ -1,3 +1,4 @@
+import { prepareImageUrl } from "../../helpers/prepareImgUrl";
 import type { Image } from "../../types/Image";
 import styles from "./SelectedList.module.scss";
 
@@ -18,7 +19,7 @@ export function LinksList({ selectedImages, onRemove }: Props) {
           <li key={img.id} className={styles.item}>
             <div className={styles.preview}>
               <img
-                src={img.download_url.replace(/(\/\d+\/\d+)$/, "/400/400")}
+                src={prepareImageUrl(img.download_url)}
                 alt={`Image ${img.id} by ${img.author}`}
               />
             </div>
