@@ -1,12 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Image } from "../types/Image";
-import { useResizeObserver } from "./useResizeObserver";
 
 export function useCarousel(initialSlides: Image[]) {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+
   const [visibleSlides, setVisibleSlides] = useState(1);
   const [activeSlide, setActiveSlide] = useState(1);
   const [smooth, setSmooth] = useState(true);
-  const { elementRef, width } = useResizeObserver();
+
+  useEffect(() => {
+    if (!sliderRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      if (entries[0]) {
+        setWidth(entries[0].contentRect.width);
+      }
+    });
+
+    observer.observe(sliderRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     let visibleSlidesNum = 1;
@@ -60,6 +77,6 @@ export function useCarousel(initialSlides: Image[]) {
     slides,
     checkIfSlidesEnds,
     smooth,
-    elementRef,
+    sliderRef,
   };
 }

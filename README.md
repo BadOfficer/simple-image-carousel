@@ -4,6 +4,22 @@
 
 [Carousel App](https://BadOfficer.github.io/simple-image-carousel/)
 
+## Technologies used
+
+### Core
+
+- React
+- TypeScript
+
+### UI / Styling
+
+- SCSS
+- Flexbox
+
+### Development
+
+- Vite — build tool
+
 ## Setup localy
 
 1. Clone the repository:
@@ -29,3 +45,9 @@ npm start
 # or
 yarn start
 ```
+
+## Features
+
+- <b>Image Slider</b> — switch selectable images forward and backward
+- <b>Navigation Buttons</b> — simple controls for slide navigation
+- <b>Responsive Layout</b> — works well on all screen sizes
