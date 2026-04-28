@@ -1,38 +1,29 @@
 import { useEffect, useState } from "react";
 import type { Image } from "../types/Image";
+import { useResizeObserver } from "./useResizeObserver";
 
 export function useCarousel(initialSlides: Image[]) {
   const [visibleSlides, setVisibleSlides] = useState(1);
   const [activeSlide, setActiveSlide] = useState(1);
   const [smooth, setSmooth] = useState(true);
+  const { elementRef, width } = useResizeObserver();
 
   useEffect(() => {
-    const onResize = () => {
-      const windowWidth = window.innerWidth;
-      let visibleSlidesNum = 1;
+    let visibleSlidesNum = 1;
 
-      if (windowWidth >= 1200) {
-        visibleSlidesNum = 4;
-      } else if (windowWidth >= 1024) {
-        visibleSlidesNum = 3;
-      } else if (windowWidth >= 768) {
-        visibleSlidesNum = 2;
-      } else {
-        visibleSlidesNum = 1;
-      }
+    if (width >= 1200) {
+      visibleSlidesNum = 4;
+    } else if (width >= 1024) {
+      visibleSlidesNum = 3;
+    } else if (width >= 768) {
+      visibleSlidesNum = 2;
+    } else {
+      visibleSlidesNum = 1;
+    }
 
-      setVisibleSlides(visibleSlidesNum);
-      setActiveSlide(visibleSlidesNum);
-    };
-
-    onResize();
-
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
+    setVisibleSlides(visibleSlidesNum);
+    setActiveSlide(visibleSlidesNum);
+  }, [width]);
 
   const slidesLength = initialSlides.length;
 
@@ -69,5 +60,6 @@ export function useCarousel(initialSlides: Image[]) {
     slides,
     checkIfSlidesEnds,
     smooth,
+    elementRef,
   };
 }

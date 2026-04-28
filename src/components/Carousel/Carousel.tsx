@@ -20,6 +20,7 @@ export function Carousel({ images, onSlideClick, isSelected }: Props) {
     slides,
     checkIfSlidesEnds,
     smooth,
+    elementRef,
   } = useCarousel(images);
 
   const slideWidth = `calc((100% - ${SLIDES_GAP * (visibleSlides - 1)}px) / ${visibleSlides})`;
@@ -31,7 +32,7 @@ export function Carousel({ images, onSlideClick, isSelected }: Props) {
         className={`${styles.arrowBtn} ${styles.leftArrow}`}
         onClick={handlePrev}
       ></button>
-      <div className={styles.carousel}>
+      <div className={styles.carousel} ref={elementRef}>
         <ul
           className={`${styles.track} ${smooth ? styles.smooth : ""}`}
           style={{
