@@ -1,0 +1,38 @@
+@use "../../styles/utils/vars" as *;
+
+.wrapper {
+  background-color: $error-bg;
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.title {
+  color: $error-title;
+  margin: 0;
+}
+
+.text {
+  color: $error-text;
+  text-align: center;
+  font-size: 18px;
+}
+
+.button {
+  border: 1px solid $error-btn;
+  background: transparent;
+  padding: 4px 8px;
+  color: $error-btn;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all $transition-duration $main-transition-func;
+  width: fit-content;
+
+  &:hover {
+    background-color: $error-btn;
+    color: #0f172a;
+  }
+}

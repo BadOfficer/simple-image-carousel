@@ -9,16 +9,20 @@ export function useCarousel(initialSlides: Image[]) {
   useEffect(() => {
     const onResize = () => {
       const windowWidth = window.innerWidth;
+      let visibleSlidesNum = 1;
 
       if (windowWidth >= 1200) {
-        setVisibleSlides(4);
+        visibleSlidesNum = 4;
       } else if (windowWidth >= 1024) {
-        setVisibleSlides(3);
+        visibleSlidesNum = 3;
       } else if (windowWidth >= 768) {
-        setVisibleSlides(2);
+        visibleSlidesNum = 2;
       } else {
-        setVisibleSlides(1);
+        visibleSlidesNum = 1;
       }
+
+      setVisibleSlides(visibleSlidesNum);
+      setActiveSlide(visibleSlidesNum);
     };
 
     onResize();
@@ -29,10 +33,6 @@ export function useCarousel(initialSlides: Image[]) {
       window.removeEventListener("resize", onResize);
     };
   }, []);
-
-  useEffect(() => {
-    setActiveSlide(visibleSlides);
-  }, [visibleSlides]);
 
   const slidesLength = initialSlides.length;
 

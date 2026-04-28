@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { Image } from "./types/Image";
-import { typedFetch } from "./utils/typedFetch";
 import { Carousel } from "./components/Carousel";
 import { LinksList } from "./components/SelectedList";
 import { Loader } from "./components/Loader";
 
 import "./App.scss";
 import { useSelect } from "./hooks/useSelect";
+import { ErrorMessage } from "./components/ErrorMessage";
+import { useFetch } from "./hooks/useFetch";
 
 function App() {
-  const [images, setImages] = useState<Image[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    data: images,
+    isLoading,
+    error,
+    handleFetch,
+  } = useFetch<Image[]>("https://picsum.photos/v2/list?limit=20", []);
   const { handleToggleId, isSelected, selectedImages } = useSelect(images);
 
   useEffect(() => {
-    setIsLoading(true);
-    typedFetch<Image[]>("https://picsum.photos/v2/list?limit=20")
-      .then((imagesData) => {
-        setImages(imagesData);
-      })
-      .catch((e) => console.error(e))
-      .finally(() => setIsLoading(false));
+    handleFetch();
   }, []);
 
   return (
@@ -32,6 +31,8 @@ function App() {
           <div className="loaderWrapper">
             <Loader />
           </div>
+        ) : error ? (
+          <ErrorMessage message={error} onRetry={handleFetch} />
         ) : (
           <Carousel
             images={images}
